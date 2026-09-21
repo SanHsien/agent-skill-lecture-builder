@@ -325,6 +325,11 @@ function parseContent(md) {
         for (let j = i + 1; j < lines.length; j++) {
           const l = lines[j].trim();
           if (/^#{1,3} /.test(l) || /^---\s*$/.test(l)) break;
+          // A new [youtube ...] tag means the current line was a standalone
+          // self-closing embed (e.g. has its own title="...") rather than an
+          // opener whose body/close lives further down — stop the lookahead
+          // so its content/caption isn't swallowed by this unrelated block.
+          if (/^\[youtube\b/i.test(l)) break;
           if (/^\[\/youtube\]/i.test(l)) {
             closeIdx = j;
             break;
