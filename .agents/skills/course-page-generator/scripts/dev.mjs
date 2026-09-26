@@ -13,7 +13,7 @@
  */
 
 import { createServer } from 'http';
-import { readFileSync, existsSync, statSync, watch } from 'fs';
+import { readFileSync, existsSync, statSync, watch, openSync, fstatSync, closeSync } from 'fs';
 import { resolve, dirname, join, extname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
@@ -106,21 +106,32 @@ const server = createServer((req, res) => {
   // Serve static files from courseDir
   let filePath = join(courseDir, url.pathname === '/' ? 'index.html' : url.pathname);
 
-  if (!existsSync(filePath)) {
+  try {
+    if (statSync(filePath).isDirectory()) filePath = join(filePath, 'index.html');
+  } catch {
     res.writeHead(404);
     res.end('Not found');
     return;
   }
 
-  if (statSync(filePath).isDirectory()) {
-    filePath = join(filePath, 'index.html');
-    if (!existsSync(filePath)) { res.writeHead(404); res.end('Not found'); return; }
+  // Validate and read through one descriptor, so the bytes served are from
+  // the regular file that was checked, even if the path changes meanwhile.
+  let content;
+  let fd;
+  try {
+    fd = openSync(filePath, 'r');
+    if (!fstatSync(fd).isFile()) throw new Error('not a regular file');
+    content = readFileSync(fd);
+  } catch {
+    res.writeHead(404);
+    res.end('Not found');
+    return;
+  } finally {
+    if (fd !== undefined) closeSync(fd);
   }
 
   const ext = extname(filePath).toLowerCase();
   const mime = MIME[ext] || 'application/octet-stream';
-
-  let content = readFileSync(filePath);
 
   // Inject live-reload snippet into HTML
   if (ext === '.html') {

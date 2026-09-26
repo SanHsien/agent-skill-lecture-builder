@@ -722,7 +722,11 @@ function buildTocItems(sections) {
 function buildInstructor(cfg) {
   const inst = cfg.instructor || {};
   const placeholderHtml = '<div class="instructor-avatar-placeholder">\u{1F464}</div>';
-  const onerrorHtml = placeholderHtml.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+  // Escape backslashes first so the quote escaping below cannot be undone.
+  const onerrorHtml = placeholderHtml
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, "\\'");
   const avatar = inst.avatar
     ? `<img class="instructor-avatar" src="${esc(inst.avatar)}" alt="${esc(inst.name)}" onerror="this.outerHTML='${onerrorHtml}';">`
     : placeholderHtml;

@@ -3718,7 +3718,7 @@
         </button>
       </div>
       <div class="prompt-body">npm i -g @openai/codex
-codex</div>
+codex</div>
     </div>
         <ul class="loose-list">
       <li>登入方式支援 ChatGPT 帳號、裝置代碼授權或自備 API Key</li>
@@ -3802,7 +3802,7 @@ codex</div>
         </button>
       </div>
       <div class="prompt-body">node .agents/skills/course-page-generator/scripts/build.mjs example
-node .agents/skills/course-page-generator/scripts/dev.mjs example --port 3000</div>
+node .agents/skills/course-page-generator/scripts/dev.mjs example --port 3000</div>
     </div>
         <ul class="loose-list">
       <li><code>dev.mjs</code> 透過原生 SSE 提供存檔即時熱重載（Live Reload）</li>
@@ -3834,7 +3834,7 @@ node .agents/skills/course-page-generator/scripts/dev.mjs example --port 3000</d
   <div class="reveal bonus-btn-wrap">
     <button class="bonus-btn" data-bonus-title="🎁 講者幕後心得" data-bonus-content="打造個人化工具最迷人的地方，在於解決自己切身痛點的成就感。
 當你把講義網頁做成可複用的 Agent Skill 後，每次備課的時間直接節省 80% 以上！
-期待大家也動手打造屬於自己的工作流 Skill！">
+期待大家也動手打造屬於自己的工作流 Skill！">
       🎁 講者幕後心得
     </button>
   </div>
@@ -4127,9 +4127,15 @@ node .agents/skills/course-page-generator/scripts/dev.mjs example --port 3000</d
     });
 
     // Shared markdown helpers (used by bonus modal and PDF export)
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Bonus text arrives already decoded (dataset / textContent), so escape it
+    // once, then apply the two inline markdown forms.
     function fmtInline(s) {
-      return s
-        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+      return escHtml(s)
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/`([^`]+)`/g, '<code>$1</code>');
     }
@@ -4524,8 +4530,8 @@ node .agents/skills/course-page-generator/scripts/dev.mjs example --port 3000</d
           titleSlide.className = 'slide slide-section-title';
           titleSlide.innerHTML =
             '<div class="section-title-inner">' +
-            (sectionLabel ? '<div class="section-title-num">' + sectionLabel + '</div>' : '') +
-            '<h2 class="section-title-heading">' + mainTitle + '</h2>' +
+            (sectionLabel ? '<div class="section-title-num">' + escHtml(sectionLabel) + '</div>' : '') +
+            '<h2 class="section-title-heading">' + escHtml(mainTitle) + '</h2>' +
             (leadClone ? '<div class="section-title-lead">' + leadClone.innerHTML + '</div>' : '') +
             '</div>';
           printSlides.appendChild(titleSlide);
