@@ -3878,9 +3878,15 @@
     });
 
     // Shared markdown helpers (used by bonus modal and PDF export)
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Bonus text arrives already decoded (dataset / textContent), so escape it
+    // once, then apply the two inline markdown forms.
     function fmtInline(s) {
-      return s
-        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
+      return escHtml(s)
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/`([^`]+)`/g, '<code>$1</code>');
     }
@@ -4275,8 +4281,8 @@
           titleSlide.className = 'slide slide-section-title';
           titleSlide.innerHTML =
             '<div class="section-title-inner">' +
-            (sectionLabel ? '<div class="section-title-num">' + sectionLabel + '</div>' : '') +
-            '<h2 class="section-title-heading">' + mainTitle + '</h2>' +
+            (sectionLabel ? '<div class="section-title-num">' + escHtml(sectionLabel) + '</div>' : '') +
+            '<h2 class="section-title-heading">' + escHtml(mainTitle) + '</h2>' +
             (leadClone ? '<div class="section-title-lead">' + leadClone.innerHTML + '</div>' : '') +
             '</div>';
           printSlides.appendChild(titleSlide);
