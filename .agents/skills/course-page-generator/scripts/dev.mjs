@@ -13,7 +13,7 @@
  */
 
 import { createServer } from 'http';
-import { readFileSync, existsSync, statSync, watch, openSync, fstatSync, closeSync } from 'fs';
+import { readFileSync, statSync, watch, openSync, fstatSync, closeSync } from 'fs';
 import { resolve, dirname, join, extname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
@@ -106,20 +106,21 @@ const server = createServer((req, res) => {
   // Serve static files from courseDir
   let filePath = join(courseDir, url.pathname === '/' ? 'index.html' : url.pathname);
 
-  try {
-    if (statSync(filePath).isDirectory()) filePath = join(filePath, 'index.html');
-  } catch {
-    res.writeHead(404);
-    res.end('Not found');
-    return;
-  }
-
   // Validate and read through one descriptor, so the bytes served are from
-  // the regular file that was checked, even if the path changes meanwhile.
+  // the regular file that was checked, avoiding TOCTOU file system race conditions.
   let content;
   let fd;
   try {
-    fd = openSync(filePath, 'r');
+    try {
+      fd = openSync(filePath, 'r');
+    } catch (err) {
+      if ((err.code === 'EISDIR' || err.code === 'EPERM') && !filePath.endsWith('index.html')) {
+        filePath = join(filePath, 'index.html');
+        fd = openSync(filePath, 'r');
+      } else {
+        throw err;
+      }
+    }
     if (!fstatSync(fd).isFile()) throw new Error('not a regular file');
     content = readFileSync(fd);
   } catch {
