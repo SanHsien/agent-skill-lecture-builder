@@ -1149,7 +1149,11 @@ function build(courseDir) {
   const sidebarBrand = (cfg.page?.title || '').replace(/\s*[—–-]\s*/, '<br>');
 
   let html = templateRaw;
-  html = html.replace(/<!--[\s\S]*?-->\n?/g, '');
+  let prevHtml;
+  do {
+    prevHtml = html;
+    html = html.replace(/<!--[\s\S]*?-->\n?/g, '');
+  } while (html !== prevHtml);
 
   // Auto-detect GitHub Pages URL as fallback for SEO fields
   const ghPagesBase = detectGitHubPagesBase(globalRoot);
