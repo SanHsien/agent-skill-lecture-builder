@@ -1,0 +1,51 @@
+page:
+  lang: zh-TW
+  title: "Vibe Coding 與 Agent Skill：打造個人化講義網站"
+  badge: "Vibe Coding · Agent Skills · 系統設計"
+  hero_title: "用系統設計思維<br>打造個人化講義網站"
+  subtitle: "從 Vibe Coding 雛形到封裝可複用的 Agent Skill，避免免洗式開發，建立長期可維護的 AI 工作流。"
+
+instructor:
+  name: "鼎淵 Dean Lin"
+  tagline: "全端工程師 · 技術作家 · 講師"
+  bio: >
+    工程師下班有約頻道主理人。<br>
+    專注於 AI 開發工作流、全端架構與軟體工程實務分享。
+  avatar: "config/assets/author.jpeg"
+  stats:
+    - text: "📚 著有 **AI 開發實務** 相關專書"
+      url: "https://www.tenlong.com.tw"
+    - text: "🎤 累積分享與工作坊 **數十** 場"
+      url: "https://www.youtube.com/@dlcorner"
+  socials:
+    - platform: "YouTube"
+      url: "https://www.youtube.com/@dlcorner"
+    - platform: "Facebook"
+      url: "https://www.facebook.com/deanlinbao"
+    - platform: "Threads"
+      url: "https://www.threads.com/@deanlin5288"
+    - platform: "Medium"
+      url: "https://medium.com/@dean-lin"
+    - platform: "GitHub"
+      url: "https://github.com/dean9703111"
+
+quotes:
+  opening:
+    text: "既然課程在講 AI 寫程式，那與其使用傳統 PPT 做講義，<br>不如用 Vibe Coding 打造完全量身定制的講義網站。"
+    author: "鼎淵 Dean Lin"
+  closing:
+    text: >
+      不要只把 Vibe Coding 的成果當成免洗餐具，用完就丟；<br>
+      而是開始思考如何把它設計成可以長期使用、維護、擴增的工具。
+    author: "鼎淵 Dean Lin"
+
+footer:
+  cta: "歡迎訂閱「工程師下班有約」YouTube 頻道與追蹤社群"
+  copyright: "© 2026 Dean Lin & SanHsien"
+  show_socials: true
+
+seo:
+  site_name: "工程師下班有約"
+  type: "article"
+  title: "Vibe Coding 與 Agent Skill：打造個人化講義網站"
+  description: "從 Vibe Coding 雛形到封裝可複用的 Agent Skill，避免免洗式開發，建立長期可維護的 AI 工作流。"
