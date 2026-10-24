@@ -15,13 +15,13 @@
 ## 硬性邊界
 
 - 不提交使用者輸入檔案、專有文件、API key、token、私鑰或 `.env`。
-- 不推送到 `upstream`。上游同步先跑 `python tools/check_upstream_updates.py`，逐筆審查後再 merge / cherry-pick；不盲目覆蓋 fork 文件與 Windows gate。
+- PR、push、release 一律指向 `SanHsien/agent-skill-lecture-builder`；未經當次許可不得打向 `deancourse/agent-skill-lecture-builder`，也不推送到 `upstream`。上游同步先跑 `python tools/check_upstream_updates.py`，逐筆審查後再 merge / cherry-pick；不盲目覆蓋 fork 文件與 Windows gate。
 - 不要把維護 gate 改成完整依賴安裝。維護環境（`requirements-dev.txt`）僅安裝 pytest 與 ruff。
 - 不把 fork 包裝成原創產品，不移除原作者 Dean Lin 或官方連結。
 
 ## 技術與資料流
 
-- 核心建置腳本：`.agents/skills/course-page-generator/scripts/build.mjs`（純 Node.js ESM，零依賴將 Markdown 轉 HTML）、`dev.mjs`（開發伺服器與 SSE 熱重載）、`generate-og.mjs`（Puppeteer 生成 1200x630 OG 縮圖）。
+- 核心建置腳本（以上游為準）：`.agents/skills/course-page-generator/scripts/build.mjs`（純 Node.js ESM，零依賴將 Markdown 轉 HTML）、`dev.mjs`（開發伺服器與 SSE 熱重載）、`generate-og.mjs`（Puppeteer 生成 1200x630 OG 縮圖）。
 - 模板與範例：`.agents/skills/course-page-generator/reference/`（`base.html`、`components.md`、`config-example.yaml`、`content-example.md`）。
 - 全域設定：`config/global.yaml`、`config/assets/`。
 - 範例課程：`example/`（包含 `content.md`、`config.yaml`、`README.md`、`index.html`）。
