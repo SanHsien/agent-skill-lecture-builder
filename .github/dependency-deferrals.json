@@ -1,3 +1,8 @@
 {
-  "deferrals": {}
+  "deferrals": {
+    "ruff": {
+      "deferredLatest": "0.17.2",
+      "reason": "已用 ruff 0.17.2 實測：宣告的 >=0.16 已涵蓋此版，E9+F 閘門與 27 項 pytest 全綠；維護 gate 只用 E9/F，升下限沒有相容性收益，暫不改宣告。"
+    }
+  }
 }
