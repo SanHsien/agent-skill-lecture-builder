@@ -45,6 +45,7 @@ gh repo set-default --view
 | R-08 | P2 | 健全範例課程目錄 `example/`：補齊 `content.md` 與 `config.yaml`，解決 `npm run build:example` 開箱缺少 `content.md` 報錯缺陷 |
 | R-09 | P2 | Windows 路徑 URL 相容性硬化：在 `build.mjs` 中對 `coursePath` 加入反斜線正規化，避免 Windows 路徑反斜線破壞 SEO/OG 網址 |
 | R-10 | P2 | 修復 YouTube 多行區塊與單行語法解析邊界：在 `build.mjs` 加入遇到新 `[youtube` 標籤時終止 lookahead 防禦，解決單行影片標籤吞噬後續區塊問題（commit `15798f4`），`test_youtube_block_and_single_line_parsing` 測試通過 |
+| R-11 | P3 | 深度掃描（2026-10-26）：`check_links.py` 誤報連結標題／query、4 反引號圍欄被提早關閉、圖片重複回報（commit `e3f7215`）；`check_dependency_freshness.py` 延後清單未正規化 `_`／`-` 套件名（commit `e473ad7`），皆附重現測試 |
 
 ## 接受、不改契約
 
