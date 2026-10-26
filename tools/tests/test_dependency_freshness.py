@@ -97,3 +97,24 @@ def test_report_names_both_exits_so_the_next_person_does_not_invent_a_third() ->
     assert "freshness-hold:" in report
     assert "dependency-deferrals.json" in report
     assert "mute button" in report
+
+
+def test_deferral_matches_package_name_across_underscore_and_dash(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(checker, "fetch_pypi_version", lambda name: "2.0.0")
+    packages = [
+        {"name": "Foo_Bar", "minimum": "1.0", "requirement": "Foo_Bar>=1.0",
+         "source": "requirements-dev.txt", "hold": ""}
+    ]
+    rows = checker.collect_status(packages, {"foo-bar": ("2.0.0", "reviewed")})
+    assert rows[0]["deferred_reason"] == "reviewed"
+
+
+def test_load_deferrals_normalises_names(tmp_path: Path) -> None:
+    path = tmp_path / "d.json"
+    path.write_text(
+        json.dumps({"deferrals": {"Foo_Bar": {"deferredLatest": "2", "reason": "r"}}}),
+        encoding="utf-8",
+    )
+    assert "foo-bar" in checker.load_deferrals(path)
