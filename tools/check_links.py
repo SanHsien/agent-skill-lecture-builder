@@ -15,7 +15,6 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent.parent
 LINK_PATTERN = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
-IMAGE_PATTERN = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
 HTML_SRC_PATTERN = re.compile(r"""(?is)<img[^>]+src=["']([^"']+)["']""")
 SKIP_PREFIXES = ("http://", "https://", "mailto:", "tel:", "#")
 SKIP_NAMES = {
@@ -60,10 +59,15 @@ def iter_documents() -> list[Path]:
 
 
 def _missing_relative(path: Path, target: str) -> str | None:
-    target = target.strip().strip("<>")
+    target = target.strip()
+    if target.startswith("<") and ">" in target:
+        target = target[1 : target.index(">")]
+    else:
+        # `[t](path "title")`: the optional title is not part of the path.
+        target = target.split(None, 1)[0] if target else ""
     if not target or target.startswith(SKIP_PREFIXES):
         return None
-    file_part = unquote(target.split("#", 1)[0])
+    file_part = unquote(re.split(r"[#?]", target, maxsplit=1)[0])
     if not file_part:
         return None
     resolved = (path.parent / file_part).resolve()
@@ -79,18 +83,22 @@ def _missing_relative(path: Path, target: str) -> str | None:
 def strip_code(text: str) -> str:
     lines = text.splitlines()
     in_fence = False
-    fence_marker = ""
+    fence_char = ""
+    fence_len = 0
     out_lines = []
     for line in lines:
         stripped = line.strip()
         if not in_fence:
-            if stripped.startswith("```") or stripped.startswith("~~~"):
+            opening = re.match(r"(`{3,}|~{3,})", stripped)
+            if opening:
                 in_fence = True
-                fence_marker = stripped[:3]
+                fence_char = opening.group(1)[0]
+                fence_len = len(opening.group(1))
                 continue
             out_lines.append(line)
         else:
-            if stripped.startswith(fence_marker):
+            # A fence closes only on the same character, at least as long.
+            if stripped and stripped == fence_char * len(stripped) and len(stripped) >= fence_len:
                 in_fence = False
                 continue
     cleaned = "\n".join(out_lines)
@@ -102,7 +110,7 @@ def check_document(path: Path) -> list[str]:
     problems: list[str] = []
     text = path.read_text(encoding="utf-8")
     stripped = strip_code(text)
-    for pattern in (LINK_PATTERN, IMAGE_PATTERN, HTML_SRC_PATTERN):
+    for pattern in (LINK_PATTERN, HTML_SRC_PATTERN):
         for match in pattern.finditer(stripped):
             missing = _missing_relative(path, match.group(1))
             if missing:
