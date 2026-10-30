@@ -11,7 +11,6 @@
 
 | 項目 | 為什麼 | 驗收方式 | 建議執行者 | 證據 |
 | --- | --- | --- | --- | --- |
-| 移除或改寫已過時的 `HANDOFF.md` | 它寫於 2026-09-27，仍把 PR #5 的 CodeQL TOCTOU 列為「待處理」並記著舊本機路徑；PR #5 已合併、CodeQL 現為 success，留著會誤導接手者 | `HANDOFF.md` 刪除（歷史在 git log），或只留指向本檔的一行；`rg "HANDOFF" -g "*.md"` 無懸空連結；`tools\dev_check.ps1` 綠（含連結檢查） | Claude Haiku | `HANDOFF.md`；`REVIEW.md` R-10；2026-10-29 `gh` 查詢：CodeQL success |
 
 ## 中期：等條件成立再做
 
