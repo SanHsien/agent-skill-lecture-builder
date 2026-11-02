@@ -18,6 +18,7 @@
 | --- | --- | --- | --- | --- |
 | 審上游新 commit／PR／issue 並推進水位 | `Upstream check` workflow 轉 failure，或上游 `main` 出現 `43642998afe9` 之後的 commit | 結論記入 `docs/DECISIONS.md`；`tools/upstream_baseline.json` 水位推進；`python tools/check_upstream_updates.py --strict` exit 0；`tools\dev_check.ps1` 與 `tools\test_product.ps1` 綠 | Claude Sonnet | `tools/upstream_baseline.json`；`docs/UPSTREAM.md:46-52` |
 | 審上游 `develop` 分支內容 | 上游把 `develop` 合進 `main`（屆時隨 `main` 審查）；baseline 只追 `main` | 合併後的 commit 依上一列流程審完 | Claude Sonnet | `docs/DECISIONS.md:37`；`docs/UPSTREAM.md:51` |
+| 重審 ruff 延後 | ruff 出現高於延後清單 `deferredLatest` 的新版（延後自動失效，`Dependency freshness` 轉紅）或 CI 開始啟用 E9/F 以外的 ruff 規則 | 以新版實測 dev gate 後更新或移除 `.github/dependency-deferrals.json` 的 ruff 條目（下限不因此提高）；`check_dependency_freshness.py --strict` exit 0；CI 綠 | Codex | `.github/dependency-deferrals.json`；`requirements-dev.txt` |
 
 ## 刻意不做
 
