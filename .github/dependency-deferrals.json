@@ -1,8 +1,8 @@
 {
   "deferrals": {
     "ruff": {
-      "deferredLatest": "0.17.2",
-      "reason": "已用 ruff 0.17.2 實測：宣告的 >=0.16 已涵蓋此版，E9+F 閘門與 27 項 pytest 全綠；維護 gate 只用 E9/F，升下限沒有相容性收益，暫不改宣告。"
+      "deferredLatest": "0.17.3",
+      "reason": "2026-11-02 已在系統暫存 venv 以 PyPI 最新 ruff 0.17.3、pytest 9.2.0 實測：Windows dev gate 的 E9+F lint 與 30 項 pytest 全綠；宣告的 >=0.16 已涵蓋此版，CI 仍只用 E9/F，升下限沒有相容性收益，維持宣告並將延後版本更新至 0.17.3。"
     }
   }
 }
